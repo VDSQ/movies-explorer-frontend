@@ -1,0 +1,157 @@
+.auth__container {
+  display: flex;
+  flex-direction: column;
+  height: 560px;
+  max-width: 396px;
+  padding: 70px;
+}
+
+.auth__title {
+  margin: 40px 0 0;
+  padding: 0;
+  font-size: 24px;
+  line-height: 29px;
+  font-weight: 500;
+}
+
+.auth__form {
+  display: flex;
+  flex-direction: column;
+  margin: 40px 0 0;
+  padding: 0;
+}
+
+.auth__input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.auth__label {
+  font-size: 10px;
+  line-height: 12px;
+  font-weight: 400;
+}
+
+.auth__input {
+  padding: 15px;
+  border: none;
+  outline: none;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 400;
+}
+
+.auth__input_invalid {
+  color: #ff3055;
+}
+
+.auth__button {
+  margin: 65px 0 0;
+  padding: 13px 0 15px;
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: 500;
+  color: #fff;
+  background-color: #3456f3;
+  border-radius: 3px;
+}
+
+.auth__button_signin {
+  margin: 155px 0 0;
+}
+
+.auth__info {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin: 16px 0 0;
+}
+
+.auth__info-text {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: 400;
+  color: #a0a0a0;
+}
+
+.auth__info-link {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: 400;
+  color: #3456f3;
+  text-decoration: none;
+}
+
+.auth__error {
+  height: 12px;
+  margin: 10px 0 0;
+  padding: 0;
+  font-size: 10px;
+  line-height: 12px;
+  font-weight: 400;
+  color: #ff3055;
+}
+
+@media screen and (max-width: 1023px) {
+  .auth__container {
+    justify-content: center;
+    padding: 232px 50px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .auth__container {
+    height: 694px;
+    padding: 56px 30px 30px;
+  }
+
+  .auth__header {
+    display: flex;
+    justify-content: center;
+  }
+
+  .auth__title {
+    margin: 50px 0 0;
+  }
+
+  .auth__title {
+    text-align: center;
+  }
+
+  .auth__form {
+    margin: 80px 0 0;
+  }
+
+  .auth__button {
+    margin: 153px 0 0;
+    padding: 15px 0;
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  .auth__button_signin {
+    margin: 243px 0 0;
+  }
+
+  .auth__info {
+    gap: 7px;
+    margin: 14px 0 0;
+  }
+
+  .auth__info-text {
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  .auth__info-link {
+    font-size: 12px;
+    line-height: 15px;
+  }
+}
