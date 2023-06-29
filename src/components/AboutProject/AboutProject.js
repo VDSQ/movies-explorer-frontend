@@ -3,9 +3,9 @@ import "./AboutProject.css";
 function About() {
   return (
     <section className="about-project">
-      <div className="container">
-        <h2 className="title">О&nbsp;проекте</h2>
-        <div className="about-project__paragraphs">
+      <div className="container about-project__constainer">
+        <h2 className="title about-project__title">О&nbsp;проекте</h2>
+        <div className="about-project__paragraphs about-project__paragraphs_diplom">
           <div className="about-project__paragraph">
             <p className="about-project__paragraph-title">
               Дипломный проект включал 5 этапов
@@ -19,7 +19,7 @@ function About() {
             <p className="about-project__paragraph-title">
               На выполнение диплома ушло 5 недель
             </p>
-            <p className="about-project__paragraph-text">
+            <p className="about-project__paragraph-text about-project__paragraph-text_duration">
               У каждого этапа был мягкий и жёсткий дедлайн, которые нужно было
               соблюдать, чтобы успешно защититься.
             </p>

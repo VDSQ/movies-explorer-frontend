@@ -28,49 +28,57 @@ function Profile({ isMobileNavigationOpen, onClickMobileNavigation }) {
   return (
     <Fragment>
       {header}
-      <section className="profile">
-        <div className="container profile__container">
-          <h1 className="profile__title">Привет, Виталий!</h1>
-          <form className="profile__form">
-            <div className="profile__input-container profile__input-container_name">
-              <label className="profile__label">Имя</label>
-              <input
-                className="profile__input"
-                name="name"
-                placeholder="Имя"
-                type="text"
-                value={currentUser.name || ""}
-                onChange={handleName}
-              />
-            </div>
-            <div className="profile__input-container">
-              <label className="profile__label">E-mail</label>
-              <input
-                className="profile__input"
-                name="email"
-                placeholder="E-mail"
-                type="email"
-                value={currentUser.email || ""}
-                onChange={handleEmail}
-              />
-            </div>
+      <main className="main">
+        <section className="profile">
+          <div className="container profile__container">
+            <h1 className="profile__title">Привет, Виталий!</h1>
+            <form className="profile__form">
+              <div className="profile__input-container profile__input-container_name">
+                <label className="profile__label">Имя</label>
+                <input
+                  className="profile__input"
+                  name="name"
+                  placeholder="Имя"
+                  type="text"
+                  value={currentUser.name || ""}
+                  onChange={handleName}
+                  minLength="2"
+                  maxLength="30"
+                  required
+                />
+              </div>
+              <div className="profile__input-container">
+                <label className="profile__label">E-mail</label>
+                <input
+                  className="profile__input"
+                  name="email"
+                  placeholder="E-mail"
+                  type="email"
+                  value={currentUser.email || ""}
+                  onChange={handleEmail}
+                  required
+                />
+              </div>
+              <div className="profile__button-container">
+                <button
+                  className="button profile__button profile__button_edit"
+                  type="button"
+                >
+                  Редактировать
+                </button>
+              </div>
+            </form>
             <div className="profile__button-container">
               <button
-                className="button profile__button profile__button_edit"
+                className="button profile__button profile__button_exit"
                 type="button"
               >
-                Редактировать
+                Выйти из аккаунта
               </button>
             </div>
-          </form>
-          <button
-            className="button profile__button profile__button_exit"
-            type="button"
-          >
-            Выйти из аккаунта
-          </button>
-        </div>
-      </section>
+          </div>
+        </section>
+      </main>
       {mobileNavigation}
     </Fragment>
   );

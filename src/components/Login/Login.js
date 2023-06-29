@@ -22,6 +22,7 @@ function Login() {
               name="email"
               placeholder="E-mail"
               type="email"
+              required
             />
           </div>
           <span className="auth__error"></span>
@@ -32,10 +33,13 @@ function Login() {
               name="password"
               placeholder="Пароль"
               type="password"
+              minLength="2"
+              maxLength="40"
+              required
             />
           </div>
-          <span className="auth__error"></span>
-          <button className="button auth__button auth__button_signin" type="button">
+          <span className="auth__error auth__error_signin-password"></span>
+          <button className="button auth__button" type="button">
             Войти
           </button>
         </form>

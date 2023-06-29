@@ -17,10 +17,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
   position: relative;
   width: 520px;
-  padding: 159px 0 90px;
   background-color: #fff;
 }
 
@@ -37,10 +35,15 @@
   background-size: cover;
 }
 
+.mobile-navigation__nav {
+  width: 520px;
+  padding: 160px 0 354px;
+}
+
 .mobile-navigation__list {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 24px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -64,8 +67,32 @@
   border-bottom: 2px solid #000;
 }
 
+.mobile-navigation__profile-link {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 16px;
+}
+
 @media screen and (max-width: 767px) {
   .mobile-navigation__container {
     width: 320px;
+  }
+
+  .mobile-navigation__button-close {
+    top: 13px;
+    right: 13px;
+  }
+
+  .mobile-navigation__nav {
+    padding: 144px 0 434px;
+  }
+
+  .mobile-navigation__list {
+    gap: 18px;
+  }
+
+  .mobile-navigation__link {
+    padding: 0 0 6px;
   }
 }

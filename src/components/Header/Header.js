@@ -13,8 +13,10 @@ function Header({ isLoggedIn, isMainPage, onClickMobileNavigation }) {
     />
   );
 
+  const headerNavyClassName = isMainPage ? " header_navy" : "";
+
   return (
-    <header className="header">
+    <header className={"header" + headerNavyClassName}>
       <div className="container header__container">
         {logo}
         {navigation}

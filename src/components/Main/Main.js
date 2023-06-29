@@ -1,3 +1,4 @@
+import Header from "../Header/Header";
 import Promo from "../Promo/Promo";
 import AboutProject from "../AboutProject/AboutProject";
 import Techs from "../Techs/Techs";
@@ -9,14 +10,20 @@ import { Fragment } from "react";
 function Main({ isMobileNavigationOpen, onClickMobileNavigation }) {
   return (
     <Fragment>
-      <Promo onClickMobileNavigation={onClickMobileNavigation} />
-      <AboutProject />
-      <Techs />
-      <AboutMe />
-      <MobileNavigation
-        isOpen={isMobileNavigationOpen}
-        onClose={onClickMobileNavigation}
+      <Header
+        isMainPage={true}
+        onClickMobileNavigation={onClickMobileNavigation}
       />
+      <main className="main">
+        <Promo onClickMobileNavigation={onClickMobileNavigation} />
+        <AboutProject />
+        <Techs />
+        <AboutMe />
+        <MobileNavigation
+          isOpen={isMobileNavigationOpen}
+          onClose={onClickMobileNavigation}
+        />
+      </main>
       <Footer />
     </Fragment>
   );

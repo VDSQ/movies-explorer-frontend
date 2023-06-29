@@ -3,11 +3,20 @@
   margin: 0;
 }
 
+.about-project__constainer {
+  padding: 0 70px;
+}
+
+.about-project__title {
+  padding: 110px 0 22px;
+}
+
 .about-project__paragraphs {
   display: flex;
   justify-content: space-between;
   gap: 40px;
-  margin: 70px 0 0;
+  margin: 0;
+  padding: 70px 0 84px;
 }
 
 .about-project__paragraph {
@@ -16,7 +25,7 @@
 
 .about-project__paragraph-title {
   margin: 0;
-  padding: 0;
+  padding: 0 0 26px;
   font-size: 20px;
   line-height: 24px;
   letter-spacing: -0.04em;
@@ -24,8 +33,8 @@
 }
 
 .about-project__paragraph-text {
-  margin: 26px 0 0;
-  padding: 0;
+  margin: 0;
+  padding: 0 0 26px;
   font-size: 14px;
   line-height: 20px;
   font-weight: 400;
@@ -33,7 +42,8 @@
 
 .about-project__paragraphs_calendar {
   gap: 0;
-  margin: 110px 0 0;
+  margin: 0;
+  padding: 0 0 96px;
 }
 
 .about-project__calendar {
@@ -50,7 +60,7 @@
 
 .about-project__calendar-title {
   margin: 0;
-  padding: 11px 0;
+  padding: 9px 0;
   text-align: center;
   font-size: 14px;
   line-height: 18px;
@@ -68,7 +78,7 @@
 
 .about-project__calendar-text {
   margin: 0;
-  margin-top: 14px;
+  padding: 14px 0;
   text-align: center;
   color: #a0a0a0;
   font-size: 14px;
@@ -77,12 +87,28 @@
 }
 
 @media screen and (max-width: 1023px) {
+  .about-project__constainer {
+    padding: 0 50px;
+  }
+
+  .about-project__title {
+    padding: 90px 0 22px;
+  }
+
   .about-project__paragraphs {
     gap: 30px;
   }
 
+  .about-project__paragraphs_diplom {
+    padding: 70px 0 67px;
+  }
+
   .about-project__paragraph {
     max-width: 319px;
+  }
+
+  .about-project__paragraph-title {
+    padding: 0 0 22px;
   }
 
   .about-project__paragraph-text {
@@ -92,7 +118,7 @@
 
   .about-project__paragraphs_calendar {
     gap: 0;
-    margin: 93px 0 0;
+    padding: 0 0 78px;
   }
 
   .about-project__calendar_lime {
@@ -109,20 +135,41 @@
 }
 
 @media screen and (max-width: 767px) {
+  .about-project__constainer {
+    padding: 0 18px;
+  }
+
+  .about-project__title {
+    padding: 70px 0 27px;
+  }
+
   .about-project__paragraphs {
     flex-direction: column;
-    gap: 56px;
-    margin: 60px 0 0;
+    gap: 0;
+  }
+
+  .about-project__paragraphs_diplom {
+    padding: 62px 0 0;
+  }
+
+  .about-project__paragraph {
+    padding: 0;
   }
 
   .about-project__paragraph-title {
     font-size: 18px;
     line-height: 22px;
+    padding: 0 0 14px;
   }
 
   .about-project__paragraph-text {
     font-size: 11px;
     line-height: 16px;
+    padding: 0 0 58px;
+  }
+
+  .about-project__paragraph-text_duration {
+    padding: 0 0 60px;
   }
 
   .about-project__paragraphs_calendar {
@@ -133,11 +180,13 @@
   .about-project__calendar-title {
     font-size: 11px;
     line-height: 13px;
+    padding: 13px 0 9px;
   }
 
   .about-project__calendar-text {
     font-size: 11px;
     line-height: 13px;
+    padding: 10px 0 14px
   }
 
   .about-project__calendar_lime {

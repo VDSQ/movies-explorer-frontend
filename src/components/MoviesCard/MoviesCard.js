@@ -32,7 +32,7 @@ function MoviesCard({ movie, isSavedMovies }) {
       <img className="movie__image" src={movie.image} alt={movie.title} />
       <div className="movie__scription">
         <div className="movie__title-container">
-          <h2 className="movie__title">{movie.title}</h2>
+          <h2 className="movie__title">33 слова о дизайне</h2>
           {button}
         </div>
         <p className="movie__duration">{movie.duration}</p>

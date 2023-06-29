@@ -31,9 +31,11 @@ function Movies({ isMobileNavigationOpen, onClickMobileNavigation }) {
   return (
     <Fragment>
       {header}
-      {searchForm}
-      {moviesCardList}
-      {mobileNavigation}
+      <main className="main">
+        {searchForm}
+        {moviesCardList}
+        {mobileNavigation}
+      </main>
       {footer}
     </Fragment>
   );

@@ -8,7 +8,7 @@ import Profile from "../Profile/Profile";
 import NotFoundError from "../NotFoundError/NotFoundError";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 
 function App() {
@@ -22,6 +22,10 @@ function App() {
   const [message, setMessage] = useState(
     "Что-то пошло не так! Попробуйте ещё раз."
   );
+
+  useEffect(() => {
+    document.documentElement.setAttribute("lang", "ru");
+  }, []);
 
   function handleMobileNavigationClick() {
     !isMobileNavigationOpen

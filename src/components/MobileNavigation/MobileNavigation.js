@@ -43,7 +43,7 @@ function MobileNavigation({ isOpen, onClose }) {
           onClick={onClose}
         />
         <div className="mobile-navigation-nav">
-          <nav>
+          <nav className="mobile-navigation__nav">
             <ol className="mobile-navigation__list">
               <li className="mobile-navigation__item">{mainLink}</li>
               <li className="mobile-navigation__item">{moviesLink}</li>
@@ -51,7 +51,7 @@ function MobileNavigation({ isOpen, onClose }) {
             </ol>
           </nav>
         </div>
-        {profileLink}
+        <div className="mobile-navigation__profile-link">{profileLink}</div>
       </div>
     </div>
   );

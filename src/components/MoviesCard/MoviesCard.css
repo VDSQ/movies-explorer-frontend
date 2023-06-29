@@ -6,6 +6,7 @@
 }
 
 .movie__image {
+  display: flex;
   height: 151px;
   margin: 0;
   padding: 0;
@@ -17,13 +18,14 @@
 .movie__scription {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 11px;
   padding: 14px 12px;
 }
 
 .movie__title-container {
   display: flex;
   justify-content: space-between;
+  padding: 0 2px 0 0;
 }
 
 .movie__title {
@@ -69,3 +71,16 @@
   font-weight: 400;
   color: #a0a0a0;
 }
+
+@media screen and (max-width: 1023px) {
+  .movie__image {
+    height: 189px;
+  }
+}
+
+@media screen and (max-width: 787px) {
+  .movie__image {
+    height: 167px;
+  }
+}
+

@@ -8,8 +8,7 @@ function Portofolio() {
       target="_blank"
       className="link portfolio__link"
     >
-      <p className="portfolio__name">Статичный сайт</p>
-      <p className="portfolio__arrow">↗</p>
+      Статичный сайт
     </Link>
   );
 
@@ -19,8 +18,7 @@ function Portofolio() {
       target="_blank"
       className="link portfolio__link"
     >
-      <p className="portfolio__name">Адаптивный сайт</p>
-      <p className="portfolio__arrow">↗</p>
+      Адаптивный сайт
     </Link>
   );
 
@@ -30,8 +28,7 @@ function Portofolio() {
       target="_blank"
       className="link portfolio__link"
     >
-      <p className="portfolio__name">Одностраничное приложение</p>
-      <p className="portfolio__arrow">↗</p>
+      Одностраничное приложение
     </Link>
   );
 
@@ -41,7 +38,9 @@ function Portofolio() {
       <ul className="portfolio__list">
         <li className="portfolio__item">{staticSiteLink}</li>
         <li className="portfolio__item">{adaptiveSiteLink}</li>
-        <li className="portfolio__item portfolio__item_last">{singlePageAppLink}</li>
+        <li className="portfolio__item portfolio__item_last">
+          {singlePageAppLink}
+        </li>
       </ul>
     </div>
   );
