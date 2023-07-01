@@ -10,4 +10,4 @@
 [Адрес домена на бэкенд](https://movies-explorer.api.nomoreparties.sbs/)
 [Адрес домена на фронтентд](https://movies-explorer.nomoreparties.sbs/)
 
-[Ссылка на пул реквест, этап 4]()
+[Ссылка на пул реквест, этап 4](https://github.com/VDSQ/movies-explorer-frontend/pull/2)
