@@ -5,8 +5,16 @@
 .search-form__form {
   display: flex;
   flex-direction: column;
-  gap: 26px;
   padding: 70px 0 80px;
+}
+
+.search-form__error {
+  height: 18px;
+  padding: 4px 0;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 400;
+  color: #ff3055;
 }
 
 .search-form__input-container {
@@ -61,8 +69,10 @@
     padding: 0 14px;
   }
 
-  .search-form__form {
-    gap: 30px;
+  .search-form__error {
+    font-size: 11px;
+    line-height: 18px;
+    padding: 6px 0;
   }
 
   .search-form__input-container_search {

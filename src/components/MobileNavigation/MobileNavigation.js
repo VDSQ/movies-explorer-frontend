@@ -1,10 +1,17 @@
 import "./MobileNavigation.css";
+import { Link, useLocation } from "react-router-dom";
 import ProfileLink from "../ProfileLink/ProfileLink";
-import { Link } from "react-router-dom";
 
 function MobileNavigation({ isOpen, onClose }) {
+  const location = useLocation();
+
   const mainLink = (
-    <Link to="/" className="link mobile-navigation__link" onClick={onClose}>
+    <Link
+      to="/"
+      className={`link mobile-navigation__link ${
+        location.pathname === "/" ? "mobile-navigation__link_is-actived" : ""
+      }`}
+    >
       Главная
     </Link>
   );
@@ -12,8 +19,11 @@ function MobileNavigation({ isOpen, onClose }) {
   const moviesLink = (
     <Link
       to="/movies"
-      className="link mobile-navigation__link mobile-navigation__link_is-actived"
-      onClick={onClose}
+      className={`link mobile-navigation__link ${
+        location.pathname === "/movies"
+          ? "mobile-navigation__link_is-actived"
+          : ""
+      }`}
     >
       Фильмы
     </Link>
@@ -22,21 +32,24 @@ function MobileNavigation({ isOpen, onClose }) {
   const savedMoviesLink = (
     <Link
       to="/saved-movies"
-      className="link mobile-navigation__link"
-      onClick={onClose}
+      className={`link mobile-navigation__link ${
+        location.pathname === "/saved-movies"
+          ? "mobile-navigation__link_is-actived"
+          : ""
+      }`}
     >
       Сохранённые фильмы
     </Link>
   );
 
-  const profileLink = <ProfileLink onCloseMobileNavigation={onClose} />;
-
-  const mobileNavigationIsOpenedClassName = isOpen
-    ? " mobile-navigation_is-opened"
-    : "";
+  const profileLink = <ProfileLink />;
 
   return (
-    <div className={"mobile-navigation" + mobileNavigationIsOpenedClassName}>
+    <div
+      className={
+        "mobile-navigation" + (isOpen ? " mobile-navigation_is-opened" : "")
+      }
+    >
       <div className="mobile-navigation__container">
         <button
           className="button mobile-navigation__button-close"

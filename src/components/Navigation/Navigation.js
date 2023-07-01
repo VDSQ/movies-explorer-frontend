@@ -1,12 +1,14 @@
 import "./Navigation.css";
 import ProfileLink from "../ProfileLink/ProfileLink";
-import burgerBlackButton from "../../images/icons/burger-black.svg";
-import burgerWhiteButton from "../../images/icons/burger-white.svg";
+import burgerButtonBlack from "../../images/icons/burger-black.svg";
+import burgerButtonWhite from "../../images/icons/burger-white.svg";
 import { Fragment } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-function Navigation({ isLoggedIn, isMainPage, onClickMobileNavigation }) {
-  const notLoggedInNav = (
+function Navigation({ isLoggedIn, onClickBurger }) {
+  const location = useLocation();
+
+  const mainNavigation = (
     <Fragment>
       <nav className="navigation">
         <ol className="navigation__list navigation_list_not-loggedin">
@@ -31,25 +33,9 @@ function Navigation({ isLoggedIn, isMainPage, onClickMobileNavigation }) {
     </Fragment>
   );
 
-  const {
-    headerNavLinkWhiteClassName,
-    navigationBurgerNavyClassName,
-    burgerButton,
-  } = isMainPage
-    ? {
-        headerNavLinkWhiteClassName: " navigation__link_white",
-        navigationBurgerNavyClassName: " navigation__burger_navy",
-        burgerButton: burgerWhiteButton,
-      }
-    : {
-        headerNavLinkWhiteClassName: "",
-        navigationBurgerNavyClassName: "",
-        burgerButton: burgerBlackButton,
-      };
+  const profileLink = <ProfileLink />;
 
-  const profileLink = <ProfileLink isMainPage={isMainPage} />;
-
-  const loggedInNav = (
+  const moviesNavigation = (
     <Fragment>
       <div className="navigation__container">
         <nav className="navigation">
@@ -59,7 +45,7 @@ function Navigation({ isLoggedIn, isMainPage, onClickMobileNavigation }) {
                 to="/movies"
                 className={
                   "link navigation__link navigation__link_movies" +
-                  headerNavLinkWhiteClassName
+                  (location.pathname === "/" ? " navigation__link_white" : "")
                 }
               >
                 Фильмы
@@ -70,7 +56,7 @@ function Navigation({ isLoggedIn, isMainPage, onClickMobileNavigation }) {
                 to="/saved-movies"
                 className={
                   "link navigation__link navigation__link_saved-movies" +
-                  headerNavLinkWhiteClassName
+                  (location.pathname === "/" ? " navigation__link_white" : "")
                 }
               >
                 Сохранённые фильмы
@@ -81,16 +67,21 @@ function Navigation({ isLoggedIn, isMainPage, onClickMobileNavigation }) {
         {profileLink}
       </div>
       <button
-        className={"button navigation__burger" + navigationBurgerNavyClassName}
+        className={
+          "button navigation__burger" +
+          (location.pathname === "/" ? " navigation__burger_navy" : "")
+        }
         style={{
-          backgroundImage: `url(${burgerButton})`,
+          backgroundImage: `url(${
+            location.pathname === "/" ? burgerButtonWhite : burgerButtonBlack
+          })`,
         }}
-        onClick={onClickMobileNavigation}
+        onClick={onClickBurger}
       />
     </Fragment>
   );
 
-  return isLoggedIn ? loggedInNav : notLoggedInNav;
+  return !isLoggedIn ? mainNavigation : moviesNavigation;
 }
 
 export default Navigation;

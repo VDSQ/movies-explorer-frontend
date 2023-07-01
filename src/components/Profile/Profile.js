@@ -1,68 +1,88 @@
 import "./Profile.css";
-import Header from "../Header/Header";
-import MobileNavigation from "../MobileNavigation/MobileNavigation";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
+import { useEffect } from "react";
 import { Fragment, useContext } from "react";
+import useFormWithValidation from "../../hooks/useFormWithValidation";
 
-function Profile({ isMobileNavigationOpen, onClickMobileNavigation }) {
+function Profile({ onProfile, onSignOut }) {
   const currentUser = useContext(CurrentUserContext);
 
-  const header = (
-    <Header
-      isLoggedIn={true}
-      onClickMobileNavigation={onClickMobileNavigation}
-    />
-  );
+  const { values, handleChange, resetForm, errors, isValid } =
+    useFormWithValidation();
 
-  const mobileNavigation = (
-    <MobileNavigation
-      isOpen={isMobileNavigationOpen}
-      onClose={onClickMobileNavigation}
-    />
-  );
+  function handleSubmit(e) {
+    e.preventDefault();
 
-  function handleName(e) {}
+    onProfile(values);
+  }
 
-  function handleEmail(e) {}
+  useEffect(() => {
+    if (currentUser) {
+      resetForm(currentUser, {}, true);
+    }
+  }, [currentUser, resetForm]);
+
+  const requirementValidity =
+    !isValid ||
+    (currentUser.name === values.name && currentUser.email === values.email);
 
   return (
     <Fragment>
-      {header}
       <main className="main">
         <section className="profile">
           <div className="container profile__container">
-            <h1 className="profile__title">Привет, Виталий!</h1>
-            <form className="profile__form">
+            <h1 className="profile__title">{`Привет, ${
+              currentUser.name || ""
+            }!`}</h1>
+            <form
+              className="profile__form"
+              name="profile"
+              onSubmit={handleSubmit}
+            >
               <div className="profile__input-container profile__input-container_name">
                 <label className="profile__label">Имя</label>
                 <input
-                  className="profile__input"
-                  name="name"
-                  placeholder="Имя"
+                  className={`profile__input ${
+                    errors.name && " auth__input_invalid"
+                  }`}
                   type="text"
-                  value={currentUser.name || ""}
-                  onChange={handleName}
+                  name="name"
                   minLength="2"
                   maxLength="30"
+                  placeholder="Имя"
+                  pattern="^[A-Za-zА-Яа-я \-]+$"
+                  value={values.name || ""}
+                  onChange={handleChange}
                   required
                 />
               </div>
               <div className="profile__input-container">
                 <label className="profile__label">E-mail</label>
                 <input
-                  className="profile__input"
+                  className={`profile__input ${
+                    errors.email && " auth__input_invalid"
+                  }`}
+                  type="email"
                   name="email"
                   placeholder="E-mail"
-                  type="email"
-                  value={currentUser.email || ""}
-                  onChange={handleEmail}
+                  value={values.email || ""}
+                  onChange={handleChange}
                   required
                 />
               </div>
+              <span className="profile__error-text auth__error">
+                {errors.name || ""}
+              </span>
+              <span className="profile__error-text profile__error auth__error">
+                {errors.email || ""}
+              </span>
               <div className="profile__button-container">
                 <button
-                  className="button profile__button profile__button_edit"
-                  type="button"
+                  type="submit"
+                  className={`button profile__button profile__button_edit ${
+                    requirementValidity ? "profile__button-edit_disabled" : ""
+                  }`}
+                  disabled={requirementValidity ? true : false}
                 >
                   Редактировать
                 </button>
@@ -70,8 +90,9 @@ function Profile({ isMobileNavigationOpen, onClickMobileNavigation }) {
             </form>
             <div className="profile__button-container">
               <button
+                type="submit"
                 className="button profile__button profile__button_exit"
-                type="button"
+                onClick={onSignOut}
               >
                 Выйти из аккаунта
               </button>
@@ -79,7 +100,6 @@ function Profile({ isMobileNavigationOpen, onClickMobileNavigation }) {
           </div>
         </section>
       </main>
-      {mobileNavigation}
     </Fragment>
   );
 }

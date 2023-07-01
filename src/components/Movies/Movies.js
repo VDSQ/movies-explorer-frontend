@@ -1,42 +1,133 @@
-import "./Movies.css";
-import Header from "../Header/Header";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
+import { useContext, useState, useEffect, Fragment } from "react";
+import { moviesApi } from "../../utils/MoviesApi";
+import {
+  filterShortMovies,
+  filterMoviesByUserQuery,
+  changeMovies,
+} from "../../utils/utils";
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
-import MobileNavigation from "../MobileNavigation/MobileNavigation";
-import Footer from "../Footer/Footer";
-import movies from "../../utils/movies";
-import { Fragment } from "react";
+import Preloader from "../Preloader/Preloader";
 
-function Movies({ isMobileNavigationOpen, onClickMobileNavigation }) {
-  const header = (
-    <Header
-      isLoggedIn={true}
-      onClickMobileNavigation={onClickMobileNavigation}
+function Movies({ onSaveMovie, onDeleteMovie, savedMovies }) {
+  const currentUser = useContext(CurrentUserContext);
+
+  const [movies, setMovies] = useState([]);
+  const [initialMovies, setInitialMovies] = useState([]);
+  const [filteredMovies, setFilteredMovies] = useState([]);
+  const [isOnlyShortMovies, setIsOnlyShortMovies] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorLoading, setErrorLoading] = useState("");
+
+  function handleFilteredMovies(movies, query, isOnlyShort) {
+    const movieList = filterMoviesByUserQuery(movies, query);
+
+    setInitialMovies(movieList);
+    setFilteredMovies(isOnlyShort ? filterShortMovies(movieList) : movieList);
+    localStorage.setItem(
+      `${currentUser.email}-movies`,
+      JSON.stringify(movieList)
+    );
+  }
+
+  function handleSearchSubmit(query) {
+    localStorage.setItem(`${currentUser.email}-query`, query);
+
+    if (!movies.length) {
+      setIsLoading(true);
+
+      moviesApi
+        .getMovies()
+        .then((movies) => {
+          setMovies(movies);
+          handleFilteredMovies(changeMovies(movies), query, isOnlyShortMovies);
+        })
+        .catch(() => {
+          setErrorLoading(
+            "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз."
+          );
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } else {
+      handleFilteredMovies(movies, query, isOnlyShortMovies);
+    }
+  }
+
+  function handleIsOnlyShortMovies() {
+    localStorage.setItem(
+      `${currentUser.email}-isOnlyShortMovies`,
+      !isOnlyShortMovies
+    );
+    setIsOnlyShortMovies(!isOnlyShortMovies);
+
+    if (!isOnlyShortMovies) {
+      setFilteredMovies(filterShortMovies(initialMovies));
+    } else {
+      setFilteredMovies(initialMovies);
+    }
+  }
+
+  useEffect(() => {
+    const localMovies =
+      JSON.parse(localStorage.getItem(`${currentUser.email}-movies`)) || [];
+
+    setInitialMovies(localMovies);
+
+    if (
+      localStorage.getItem(`${currentUser.email}-isOnlyShortMovies`) === "true"
+    ) {
+      setIsOnlyShortMovies(true);
+      setFilteredMovies(filterShortMovies(localMovies));
+    } else {
+      setIsOnlyShortMovies(false);
+      setFilteredMovies(localMovies);
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
+    !filteredMovies.length
+      ? setErrorLoading("Ничего не найдено")
+      : setErrorLoading("");
+  }, [filteredMovies]);
+
+  const searchForm = (
+    <SearchForm
+      onSubmitSearch={handleSearchSubmit}
+      onClickIsOnlyShortMovies={handleIsOnlyShortMovies}
+      isOnlyShortMovies={isOnlyShortMovies}
     />
   );
 
-  const searchForm = <SearchForm />;
-
-  const moviesCardList = <MoviesCardList movies={movies} />;
-
-  const mobileNavigation = (
-    <MobileNavigation
-      isOpen={isMobileNavigationOpen}
-      onClose={onClickMobileNavigation}
+  const moviesCardList = (
+    <MoviesCardList
+      movies={filteredMovies}
+      savedMovies={savedMovies}
+      onSaveMovie={onSaveMovie}
+      onDeleteMovie={onDeleteMovie}
     />
   );
 
-  const footer = <Footer />;
+  const error = (
+    <Fragment>
+      <section className="movies">
+        <div className="container movies__error-container">
+          <p className="movies__error">{errorLoading}</p>
+        </div>
+      </section>
+    </Fragment>
+  );
+
+  const preloader = <Preloader />;
 
   return (
     <Fragment>
-      {header}
       <main className="main">
         {searchForm}
-        {moviesCardList}
-        {mobileNavigation}
+        {isLoading ? preloader : !errorLoading ? moviesCardList : error}
       </main>
-      {footer}
     </Fragment>
   );
 }

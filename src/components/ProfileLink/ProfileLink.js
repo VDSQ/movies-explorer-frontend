@@ -1,27 +1,12 @@
 import "./ProfileLink.css";
-import profileWhiteIcon from "../../images/icons/profile-white.svg";
-import profileBlackIcon from "../../images/icons/profile-black.svg";
+import profileIconBlack from "../../images/icons/profile-black.svg";
 import { Link } from "react-router-dom";
 
-function ProfileLink({ isMainPage, onCloseMobileNavigation }) {
-  const { profileIcon, headerNavLinkNavyClassName } = isMainPage
-    ? {
-        profileIcon: profileWhiteIcon,
-        headerNavLinkNavyClassName: " profile-link_navy",
-      }
-    : {
-        profileIcon: profileBlackIcon,
-        headerNavLinkNavyClassName: "",
-      };
-
+function ProfileLink() {
   return (
-    <Link
-      to="/profile"
-      className={"link profile-link" + headerNavLinkNavyClassName}
-      onClick={onCloseMobileNavigation}
-    >
+    <Link to="/profile" className="link profile-link">
       Аккаунт
-      <img src={profileIcon} alt="Profile icon" />
+      <img src={profileIconBlack} alt="Profile icon" />
     </Link>
   );
 }

@@ -2,11 +2,11 @@ import "./InfoTooltip.css";
 import successIcon from "../../images/icons/success.svg";
 import errorIcon from "../../images/icons/error.svg";
 
-function InfoTooltip({ isOpen, onClose, isSuccessStatus, message }) {
-  const infoTooltipIsOpenedClassName = isOpen ? " info-tooltip_is-opened" : "";
+function InfoTooltip({ params, onClose }) {
+  const { isOpen, isSuccess, message } = params;
 
   return (
-    <div className={"info-tooltip" + infoTooltipIsOpenedClassName}>
+    <div className={`info-tooltip ${isOpen && "info-tooltip_is-opened"}`}>
       <div className="info-tooltip__container">
         <button
           type="button"
@@ -15,9 +15,9 @@ function InfoTooltip({ isOpen, onClose, isSuccessStatus, message }) {
           onClick={onClose}
         />
         <img
-          src={isSuccessStatus ? successIcon : errorIcon}
+          src={isSuccess ? successIcon : errorIcon}
           className="info-tooltip__icon"
-          alt={isSuccessStatus ? "Success" : "Error"}
+          alt={isSuccess ? "Success" : "Error"}
         />
         <p className="info-tooltip__text">{message}</p>
       </div>
