@@ -23,8 +23,6 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [isMobileNavigationOpened, setMobileNavigationOpened] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [isLoading, setIsLoading] = useState(false);
   const [infoTooltip, setInfoTooltip] = useState({
     isOpen: false,
     isSuccess: false,
@@ -55,14 +53,12 @@ function App() {
         setInfoTooltip({
           isOpen: true,
           isSuccess: false,
-          message: "Ошибка при выходе из учетной записи",
+          message: "Ошибка при выходе из учетной записи.",
         });
       });
   }
 
   function handleLogin({ email, password }) {
-    setIsLoading(true);
-
     mainApi
       .login(email, password)
       .then((result) => {
@@ -74,7 +70,7 @@ function App() {
           setInfoTooltip({
             isOpen: true,
             isSuccess: false,
-            message: "Неверный логин или пароль",
+            message: result.message,
           });
         }
       })
@@ -82,17 +78,12 @@ function App() {
         setInfoTooltip({
           isOpen: true,
           isSuccess: false,
-          message: "Ошибка при авторизации",
+          message: "Ошибка при авторизации.",
         });
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
   }
 
   function handleRegister({ name, email, password }) {
-    setIsLoading(true);
-
     mainApi
       .createUser(name, email, password)
       .then((result) => {
@@ -106,7 +97,7 @@ function App() {
         } else {
           setInfoTooltip({
             isOpen: true,
-            isSuccess: true,
+            isSuccess: false,
             message: result.message,
           });
         }
@@ -115,35 +106,37 @@ function App() {
         setInfoTooltip({
           isOpen: true,
           isSuccess: false,
-          message: "Ошибка при регистрации",
+          message: "Ошибка при регистрации.",
         });
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
   }
 
   function handleProfile({ name, email }) {
-    setIsLoading(true);
-
     mainApi
       .updateUser(name, email)
       .then((result) => {
-        setCurrentUser(result);
-        setInfoTooltip({
-          isOpen: true,
-          isSuccess: true,
-          message: "Ваши данные обновлены!",
-        });
+        if (result._id) {
+          setCurrentUser(result);
+          setInfoTooltip({
+            isOpen: true,
+            isSuccess: true,
+            message: "Ваши данные обновлены!",
+          });
+        } else {
+          setInfoTooltip({
+            isOpen: true,
+            isSuccess: false,
+            message: result.message,
+          });
+        }
       })
       .catch((error) => {
         setInfoTooltip({
           isOpen: true,
           isSuccess: false,
-          message: "Не удалось обновить данные пользователя",
+          message: "Не удалось обновить данные пользователя.",
         });
-      })
-      .finally(() => setIsLoading(false));
+      });
   }
 
   function handleSaveMovie(movie) {
@@ -156,7 +149,7 @@ function App() {
         setInfoTooltip({
           isOpen: true,
           isSuccess: false,
-          message: "Не удалось сохранить фильм",
+          message: "Не удалось сохранить фильм.",
         });
       });
   }
@@ -180,7 +173,7 @@ function App() {
         setInfoTooltip({
           isOpen: true,
           isSuccess: false,
-          message: "Не удалось удалить фильм",
+          message: "Не удалось удалить фильм.",
         });
       });
   }
@@ -209,8 +202,6 @@ function App() {
     const jwt = localStorage.getItem("jwt");
 
     if (jwt) {
-      setIsLoading(true);
-
       mainApi
         .getUserInfo()
         .then((result) => {
@@ -223,11 +214,10 @@ function App() {
           setInfoTooltip({
             isOpen: true,
             isSuccess: false,
-            message: "Ошибка при верификации токена авторизации",
+            message: "Ошибка при верификации токена авторизации.",
           });
         })
         .finally(() => {
-          setIsLoading(false);
           setIsLoaded(true);
         });
     } else {
@@ -237,8 +227,6 @@ function App() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      setIsLoading(true);
-
       mainApi
         .getUserInfo()
         .then((result) => setCurrentUser(result))
@@ -246,17 +234,14 @@ function App() {
           setInfoTooltip({
             isOpen: true,
             isSuccess: false,
-            message: "Ошибка при получении пользователя",
+            message: "Ошибка при получении пользователя.",
           });
-        })
-        .finally(() => {
-          setIsLoading(false);
         });
     }
   }, [isLoggedIn]);
 
   useEffect(() => {
-    if (isLoggedIn && currentUser) {
+    if (isLoggedIn) {
       Promise.all([mainApi.getSavedMovies()])
         .then(([movies]) => {
           setSavedMovies(
@@ -267,7 +252,7 @@ function App() {
           setInfoTooltip({
             isOpen: true,
             isSuccess: false,
-            message: "Данные с сервера не загрузились",
+            message: "Данные с сервера не загрузились.",
           });
         });
     }

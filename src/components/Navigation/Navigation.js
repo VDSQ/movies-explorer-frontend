@@ -45,7 +45,10 @@ function Navigation({ isLoggedIn, onClickBurger }) {
                 to="/movies"
                 className={
                   "link navigation__link navigation__link_movies" +
-                  (location.pathname === "/" ? " navigation__link_white" : "")
+                  (location.pathname === "/" ? " navigation__link_white" : "") +
+                  (location.pathname === "/movies"
+                    ? " navigation__link_is-actived"
+                    : "")
                 }
               >
                 Фильмы
@@ -55,8 +58,11 @@ function Navigation({ isLoggedIn, onClickBurger }) {
               <Link
                 to="/saved-movies"
                 className={
-                  "link navigation__link navigation__link_saved-movies" +
-                  (location.pathname === "/" ? " navigation__link_white" : "")
+                  "link navigation__link navigation__link_movies" +
+                  (location.pathname === "/" ? " navigation__link_white" : "") +
+                  (location.pathname === "/saved-movies"
+                    ? " navigation__link_is-actived"
+                    : "")
                 }
               >
                 Сохранённые фильмы

@@ -20,7 +20,9 @@ function MoviesCardList({ movies, savedMovies, onSaveMovie, onDeleteMovie }) {
     const end = start + cardsParams.more;
 
     if (movies.length - start > 0) {
-      setMoviesOnPage([...moviesOnPage, ...movies.slice(start, end)]);
+      const moreMovies = movies.slice(start, end);
+
+      setMoviesOnPage([...moviesOnPage, ...moreMovies]);
     }
   }
 
@@ -43,7 +45,9 @@ function MoviesCardList({ movies, savedMovies, onSaveMovie, onDeleteMovie }) {
 
   useEffect(() => {
     if (movies.length) {
-      setMoviesOnPage(movies.slice(0, cardsParams.init));
+      const initialMovies = movies.slice(0, cardsParams.init);
+
+      setMoviesOnPage(initialMovies);
     }
   }, [movies, cardsParams.init]);
 

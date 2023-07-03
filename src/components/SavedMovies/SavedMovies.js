@@ -13,10 +13,13 @@ function SavedMovies({ savedMovies, onDeleteMovie }) {
   const [errorLoading, setErrorLoading] = useState("");
 
   function handleSearchSubmit(query) {
-    const moviesList = filterMoviesByUserQuery(savedMovies, query);
+    const filteredMovieList = filterMoviesByUserQuery(savedMovies, query);
+    const moviesOnPageList = isOnlyShortMovies
+      ? filterShortMovies(filteredMovieList)
+      : filteredMovieList;
 
-    setFilteredMovies(moviesList);
-    setMoviesOnPage(moviesList);
+    setFilteredMovies(filteredMovieList);
+    setMoviesOnPage(moviesOnPageList);
   }
 
   function handleIsOnlyShortMovies() {
@@ -24,30 +27,26 @@ function SavedMovies({ savedMovies, onDeleteMovie }) {
       `${currentUser.email}-isOnlyShortMovies`,
       !isOnlyShortMovies
     );
-    setIsOnlyShortMovies(!isOnlyShortMovies);
 
-    !isOnlyShortMovies
-      ? setMoviesOnPage(filterShortMovies(filteredMovies))
-      : setMoviesOnPage(filteredMovies);
+    if (!isOnlyShortMovies) {
+      const shortMovieList = filterShortMovies(filteredMovies);
+
+      setMoviesOnPage(shortMovieList);
+    } else {
+      setMoviesOnPage(filteredMovies);
+    }
+
+    setIsOnlyShortMovies(!isOnlyShortMovies);
   }
 
   useEffect(() => {
+    setMoviesOnPage(savedMovies);
     setFilteredMovies(savedMovies);
-
-    if (
-      localStorage.getItem(`${currentUser.email}-isOnlyShortMovies`) === "true"
-    ) {
-      setIsOnlyShortMovies(true);
-      setMoviesOnPage(filterShortMovies(savedMovies));
-    } else {
-      setIsOnlyShortMovies(false);
-      setMoviesOnPage(savedMovies);
-    }
-  }, [savedMovies, currentUser]);
+  }, [savedMovies]);
 
   useEffect(() => {
     !moviesOnPage.length
-      ? setErrorLoading("Ничего не найдено")
+      ? setErrorLoading("Ничего не найдено.")
       : setErrorLoading("");
   }, [moviesOnPage]);
 

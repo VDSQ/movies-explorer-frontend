@@ -24,6 +24,7 @@ function Movies({ onSaveMovie, onDeleteMovie, savedMovies }) {
     const movieList = filterMoviesByUserQuery(movies, query);
 
     setInitialMovies(movieList);
+
     setFilteredMovies(isOnlyShort ? filterShortMovies(movieList) : movieList);
     localStorage.setItem(
       `${currentUser.email}-movies`,
@@ -41,7 +42,10 @@ function Movies({ onSaveMovie, onDeleteMovie, savedMovies }) {
         .getMovies()
         .then((movies) => {
           setMovies(movies);
-          handleFilteredMovies(changeMovies(movies), query, isOnlyShortMovies);
+
+          const changedMovieList = changeMovies(movies);
+
+          handleFilteredMovies(changedMovieList, query, isOnlyShortMovies);
         })
         .catch(() => {
           setErrorLoading(
@@ -61,13 +65,16 @@ function Movies({ onSaveMovie, onDeleteMovie, savedMovies }) {
       `${currentUser.email}-isOnlyShortMovies`,
       !isOnlyShortMovies
     );
-    setIsOnlyShortMovies(!isOnlyShortMovies);
 
     if (!isOnlyShortMovies) {
-      setFilteredMovies(filterShortMovies(initialMovies));
+      const shortMovieList = filterShortMovies(initialMovies);
+
+      setFilteredMovies(shortMovieList);
     } else {
       setFilteredMovies(initialMovies);
     }
+
+    setIsOnlyShortMovies(!isOnlyShortMovies);
   }
 
   useEffect(() => {
@@ -80,7 +87,10 @@ function Movies({ onSaveMovie, onDeleteMovie, savedMovies }) {
       localStorage.getItem(`${currentUser.email}-isOnlyShortMovies`) === "true"
     ) {
       setIsOnlyShortMovies(true);
-      setFilteredMovies(filterShortMovies(localMovies));
+
+      const shortMovieList = filterShortMovies(localMovies);
+
+      setFilteredMovies(shortMovieList);
     } else {
       setIsOnlyShortMovies(false);
       setFilteredMovies(localMovies);
@@ -89,7 +99,7 @@ function Movies({ onSaveMovie, onDeleteMovie, savedMovies }) {
 
   useEffect(() => {
     !filteredMovies.length
-      ? setErrorLoading("Ничего не найдено")
+      ? setErrorLoading("Ничего не найдено.")
       : setErrorLoading("");
   }, [filteredMovies]);
 
