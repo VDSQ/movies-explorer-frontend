@@ -1,97 +1,387 @@
 import "./App.css";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
+import { useState, useEffect, useCallback } from "react";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import { mainApi } from "../../utils/MainApi";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
+import Header from "../Header/Header";
 import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
 import Profile from "../Profile/Profile";
+import Footer from "../Footer/Footer";
+import MobileNavigation from "../MobileNavigation/MobileNavigation";
 import NotFoundError from "../NotFoundError/NotFoundError";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
-import CurrentUserContext from "../../contexts/CurrentUserContext";
-import { useState, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import Preloader from "../Preloader/Preloader";
 
 function App() {
-  const [currentUser, setCurrentUser] = useState({
-    name: "Виталий",
-    email: "test@mygmail.com",
+  const navigate = useNavigate();
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState({});
+  const [isMobileNavigationOpened, setMobileNavigationOpened] = useState(false);
+  const [infoTooltip, setInfoTooltip] = useState({
+    isOpen: false,
+    isSuccess: false,
+    message: "",
   });
-  const [isMobileNavigationOpen, setMobileNavigationOpen] = useState(false);
-  const [isInfoTooltipOpen, setInfoTooltipOpen] = useState(false);
-  const [isSuccessStatus, setSuccessStatus] = useState(false);
-  const [message, setMessage] = useState(
-    "Что-то пошло не так! Попробуйте ещё раз."
+  const [savedMovies, setSavedMovies] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  function handleBurgerClick() {
+    setMobileNavigationOpened(!isMobileNavigationOpened);
+  }
+
+  const handleInfoTooltipClose = useCallback(
+    () => setInfoTooltip({ ...infoTooltip, isOpen: false }),
+    [infoTooltip]
   );
+
+  function handleSignOut() {
+    mainApi
+      .signout()
+      .then((result) => {
+        setCurrentUser({});
+        setIsLoggedIn(false);
+        localStorage.clear();
+        navigate("/", { replace: true });
+      })
+      .catch((error) => {
+        setInfoTooltip({
+          isOpen: true,
+          isSuccess: false,
+          message: "Ошибка при выходе из учетной записи.",
+        });
+      });
+  }
+
+  function handleLogin({ email, password }) {
+    mainApi
+      .login(email, password)
+      .then((result) => {
+        if (result.token) {
+          localStorage.setItem("jwt", result.token);
+          setIsLoggedIn(true);
+          navigate("/movies", { replace: true });
+        } else {
+          setInfoTooltip({
+            isOpen: true,
+            isSuccess: false,
+            message: result.message,
+          });
+        }
+      })
+      .catch((error) => {
+        setInfoTooltip({
+          isOpen: true,
+          isSuccess: false,
+          message: "Ошибка при авторизации.",
+        });
+      });
+  }
+
+  function handleRegister({ name, email, password }) {
+    mainApi
+      .createUser(name, email, password)
+      .then((result) => {
+        if (result.name && result.email) {
+          handleLogin({ email, password });
+          setInfoTooltip({
+            isOpen: true,
+            isSuccess: true,
+            message: "Вы успешно зарегистрировались!",
+          });
+        } else {
+          setInfoTooltip({
+            isOpen: true,
+            isSuccess: false,
+            message: result.message,
+          });
+        }
+      })
+      .catch((error) => {
+        setInfoTooltip({
+          isOpen: true,
+          isSuccess: false,
+          message: "Ошибка при регистрации.",
+        });
+      });
+  }
+
+  function handleProfile({ name, email }) {
+    mainApi
+      .updateUser(name, email)
+      .then((result) => {
+        if (result._id) {
+          setCurrentUser(result);
+          setInfoTooltip({
+            isOpen: true,
+            isSuccess: true,
+            message: "Ваши данные обновлены!",
+          });
+        } else {
+          setInfoTooltip({
+            isOpen: true,
+            isSuccess: false,
+            message: result.message,
+          });
+        }
+      })
+      .catch((error) => {
+        setInfoTooltip({
+          isOpen: true,
+          isSuccess: false,
+          message: "Не удалось обновить данные пользователя.",
+        });
+      });
+  }
+
+  function handleSaveMovie(movie) {
+    mainApi
+      .addMovie(movie)
+      .then((result) => {
+        setSavedMovies([result, ...savedMovies]);
+      })
+      .catch((error) => {
+        setInfoTooltip({
+          isOpen: true,
+          isSuccess: false,
+          message: "Не удалось сохранить фильм.",
+        });
+      });
+  }
+
+  function handleDeleteMovie(movie) {
+    const savedMovie = savedMovies.find(
+      (m) => m.movieId === movie.id || m.movieId === movie.movieId
+    );
+
+    mainApi
+      .deleteMovie(savedMovie._id)
+      .then(() => {
+        const updatedSavedMovies = savedMovies.filter((m) => {
+          return m.movieId === movie.id || m.movieId === movie.movieId
+            ? false
+            : true;
+        });
+        setSavedMovies(updatedSavedMovies);
+      })
+      .catch((error) => {
+        setInfoTooltip({
+          isOpen: true,
+          isSuccess: false,
+          message: "Не удалось удалить фильм.",
+        });
+      });
+  }
 
   useEffect(() => {
     document.documentElement.setAttribute("lang", "ru");
   }, []);
 
-  function handleMobileNavigationClick() {
-    !isMobileNavigationOpen
-      ? setMobileNavigationOpen(true)
-      : setMobileNavigationOpen(false);
+  useEffect(() => {
+    function closeByEscape(e) {
+      if (e.key === "Escape") {
+        handleInfoTooltipClose();
+      }
+    }
+
+    if (infoTooltip.isOpen) {
+      document.addEventListener("keydown", closeByEscape);
+
+      return () => {
+        document.removeEventListener("keydown", closeByEscape);
+      };
+    }
+  }, [infoTooltip, handleInfoTooltipClose]);
+
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+
+    if (jwt) {
+      mainApi
+        .getUserInfo()
+        .then((result) => {
+          if (result._id) {
+            setIsLoggedIn(true);
+            setCurrentUser(result);
+          }
+        })
+        .catch((error) => {
+          setInfoTooltip({
+            isOpen: true,
+            isSuccess: false,
+            message: "Ошибка при верификации токена авторизации.",
+          });
+        })
+        .finally(() => {
+          setIsLoaded(true);
+        });
+    } else {
+      setIsLoaded(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      mainApi
+        .getUserInfo()
+        .then((result) => setCurrentUser(result))
+        .catch((error) => {
+          setInfoTooltip({
+            isOpen: true,
+            isSuccess: false,
+            message: "Ошибка при получении пользователя.",
+          });
+        });
+    }
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      Promise.all([mainApi.getSavedMovies()])
+        .then(([movies]) => {
+          setSavedMovies(
+            movies.filter((movie) => movie.owner === currentUser._id)
+          );
+        })
+        .catch((error) => {
+          setInfoTooltip({
+            isOpen: true,
+            isSuccess: false,
+            message: "Данные с сервера не загрузились.",
+          });
+        });
+    }
+  }, [isLoggedIn, currentUser]);
+
+  if (!isLoaded) {
+    return (
+      <div className="app app_preloader">
+        <Preloader />
+      </div>
+    );
   }
 
-  function handleCloseInfoTooltipClick() {}
-
   return (
-    <div className="app">
-      <CurrentUserContext.Provider value={currentUser}>
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="app">
         <Routes>
-          <Route exact path="/signup" element={<Register />} />
-          <Route exact path="/signin" element={<Login />} />
+          <Route
+            exact
+            path="/signup"
+            element={
+              !isLoggedIn ? (
+                <Register onRegister={handleRegister} />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+
+          <Route
+            exact
+            path="/signin"
+            element={
+              !isLoggedIn ? (
+                <Login onLogin={handleLogin} />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+
           <Route
             exact
             path="/"
-            element={
-              <Main
-                isMobileNavigationOpen={isMobileNavigationOpen}
-                onClickMobileNavigation={handleMobileNavigationClick}
-              />
-            }
+            element={[
+              <Header
+                key="header"
+                isLoggedIn={isLoggedIn}
+                onClickBurger={handleBurgerClick}
+              />,
+              <Main key="main" />,
+              <Footer key="footer" />,
+            ]}
           />
+
           <Route
-            exact
             path="/movies"
-            element={
-              <Movies
-                isMobileNavigationOpen={isMobileNavigationOpen}
-                onClickMobileNavigation={handleMobileNavigationClick}
-              />
-            }
+            element={[
+              <Header
+                key="header"
+                isLoggedIn={isLoggedIn}
+                onClickBurger={handleBurgerClick}
+              />,
+              <ProtectedRoute
+                key="movies"
+                isLoggedIn={isLoggedIn}
+                component={Movies}
+                onSaveMovie={handleSaveMovie}
+                onDeleteMovie={handleDeleteMovie}
+                savedMovies={savedMovies}
+              />,
+              <Footer key="footer" />,
+            ]}
           />
+
           <Route
             exact
             path="/saved-movies"
-            element={
-              <SavedMovies
-                isMobileNavigationOpen={isMobileNavigationOpen}
-                onClickMobileNavigation={handleMobileNavigationClick}
-              />
-            }
+            element={[
+              <Header
+                key="header"
+                isLoggedIn={isLoggedIn}
+                onClickBurger={handleBurgerClick}
+              />,
+              <ProtectedRoute
+                key="saved-movies"
+                isLoggedIn={isLoggedIn}
+                component={SavedMovies}
+                onDeleteMovie={handleDeleteMovie}
+                savedMovies={savedMovies}
+              />,
+              <Footer key="footer" />,
+            ]}
           />
+
           <Route
             exact
             path="/profile"
-            element={
-              <Profile
-                isMobileNavigationOpen={isMobileNavigationOpen}
-                onClickMobileNavigation={handleMobileNavigationClick}
-              />
-            }
+            element={[
+              <Header
+                key="header"
+                isLoggedIn={isLoggedIn}
+                onClickBurger={handleBurgerClick}
+              />,
+              <ProtectedRoute
+                key="profile"
+                isLoggedIn={isLoggedIn}
+                component={Profile}
+                onProfile={handleProfile}
+                onSignOut={handleSignOut}
+              />,
+            ]}
           />
-          <Route exact path="/404" element={<NotFoundError />} />
+
+          <Route
+            exact
+            path="*"
+            element={<NotFoundError navigate={navigate} />}
+          />
         </Routes>
 
-        <InfoTooltip
-          isOpen={isInfoTooltipOpen}
-          onClose={handleCloseInfoTooltipClick}
-          isSuccessStatus={isSuccessStatus}
-          message={message}
+        <MobileNavigation
+          isOpen={isMobileNavigationOpened}
+          onClose={handleBurgerClick}
         />
-      </CurrentUserContext.Provider>
-    </div>
+
+        <InfoTooltip params={infoTooltip} onClose={handleInfoTooltipClose} />
+      </div>
+    </CurrentUserContext.Provider>
   );
 }
 

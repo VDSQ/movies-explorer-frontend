@@ -29,7 +29,22 @@
 .profile__input-container {
   display: flex;
   width: 410px;
-  padding: 0 0 204px;
+  /* padding: 0 0 204px; */
+}
+
+.profile__error {
+  padding: 0 0 160px;
+}
+
+.profile__error-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.profile__button-edit_disabled {
+  cursor: default;
 }
 
 .profile__input-container_name {
@@ -95,8 +110,8 @@
     height: 321px;
   }
 
-  .profile__input-container {
-    padding: 0 0 193px;
+  .profile__error {
+    padding: 0 0 149px;
   }
 
   .profile__input-container_name {
@@ -120,7 +135,15 @@
 
   .profile__input-container {
     width: 100%;
-    padding: 0 0 363px;
+    /* padding: 0 0 363px; */
+  }
+
+  .profile__error {
+    padding: 0 0 319px;
+  }
+
+  .profile__error-text {
+    justify-content: flex-start;
   }
 
   .profile__input-container_name {

@@ -1,6 +1,6 @@
 import "./Promo.css";
 
-function Promo({ onClickMobileNavigation }) {
+function Promo() {
   return (
     <section className="promo">
       <div className="container promo__container">

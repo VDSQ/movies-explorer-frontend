@@ -1,22 +1,20 @@
 import "./Header.css";
 import Navigation from "../Navigation/Navigation";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-function Header({ isLoggedIn, isMainPage, onClickMobileNavigation }) {
+function Header({ isLoggedIn, onClickBurger }) {
+  const location = useLocation();
+
   const logo = <Link to="/" className="link logo" />;
-
+  
   const navigation = (
-    <Navigation
-      isLoggedIn={isLoggedIn}
-      isMainPage={isMainPage}
-      onClickMobileNavigation={onClickMobileNavigation}
-    />
+    <Navigation isLoggedIn={isLoggedIn} onClickBurger={onClickBurger} />
   );
 
-  const headerNavyClassName = isMainPage ? " header_navy" : "";
-
   return (
-    <header className={"header" + headerNavyClassName}>
+    <header
+      className={"header" + (location.pathname === "/" ? " header_navy" : "")}
+    >
       <div className="container header__container">
         {logo}
         {navigation}

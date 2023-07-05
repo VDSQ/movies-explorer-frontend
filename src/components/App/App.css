@@ -9,3 +9,10 @@
   font-family: "Inter", Helvetica Neue, Arial, sans-serif;
   text-rendering: optimizeLegibility;
 }
+
+.app_preloader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}

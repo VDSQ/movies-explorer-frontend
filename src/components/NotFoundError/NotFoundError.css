@@ -28,14 +28,15 @@
   font-weight: 400;
 }
 
-.not-found-error__link {
+.not-found-error__button {
   margin: 0;
   padding: 14px;
   font-size: 14px;
   line-height: 17px;
   font-weight: 400;
-  color: #3456F3;
+  color: #3456f3;
   text-decoration: none;
+  background-color: #fff;
 }
 
 @media screen and (max-width: 1023px) {
@@ -43,7 +44,7 @@
     padding: 0 30px;
   }
 
-  .not-found-error__code  {
+  .not-found-error__code {
     padding: 407px 0 5px;
   }
 }
@@ -60,14 +61,12 @@
   }
 
   .not-found-error__text {
- 
     font-size: 12px;
     line-height: 15px;
     padding: 0 0 269px;
   }
-  
-  .not-found-error__link {
 
+  .not-found-error__link {
     font-size: 12px;
     line-height: 15px;
   }
